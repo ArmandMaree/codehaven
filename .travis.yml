@@ -19,10 +19,6 @@ env:
     - JOBS=1
 
 before_install:
-  - echo $HOME
-  - ls $HOME
-  - ls $HOME/frontend
-  - ls $HOME/frontend/website/
   - cd $HOME/frontend/website/
   - npm config set spin false
   - npm install -g npm@^2
@@ -31,6 +27,10 @@ before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost:7357 &
 
 install:
+  - echo $HOME
+  - ls $HOME
+  - ls $HOME/frontend
+  - ls $HOME/frontend/website/
   - cd $HOME/frontend/website/
   - npm install -g bower
   - npm install
