@@ -18,10 +18,17 @@ env:
     - JOBS=1
 
 before_install:
+  - npm config set spin false
+  - npm install -g npm@^2
   - sudo chown root /opt/google/chrome/chrome-sandbox
   - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost:7357 &
 
+install:
+  - npm install -g bower
+  - npm install
+  - bower install
+
 script:
   - cd ./frontend/website/
-  - ember test
+  - npm test
