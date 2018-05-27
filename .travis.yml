@@ -1,0 +1,25 @@
+---
+language: node_js
+node_js:
+	- "6"
+
+sudo: false
+dist: trusty
+
+addons:
+	chrome: stable
+
+cache:
+	directories:
+		- $HOME/.npm
+
+env:
+	global:
+		- JOBS=1
+
+before_install:
+	- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost:7357 &
+
+script:
+	- cd ./frontend/website/
+	- ember test
