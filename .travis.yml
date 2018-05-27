@@ -33,5 +33,9 @@ install:
   - bower install
 
 script:
+  - echo $HOME
+  - ls $HOME
+  - ls $HOME/frontend
+  - ls $HOME/frontend/website/
   - cd $HOME/frontend/website/
   - npm test
