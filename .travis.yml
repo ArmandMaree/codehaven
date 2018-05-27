@@ -11,6 +11,7 @@ addons:
 
 cache:
   directories:
+    - $HOME/frontend/website/node_modules
     - $HOME/.npm
 
 env:
@@ -18,6 +19,7 @@ env:
     - JOBS=1
 
 before_install:
+  - cd ./frontend/website/
   - npm config set spin false
   - npm install -g npm@^2
   - sudo chown root /opt/google/chrome/chrome-sandbox
@@ -25,6 +27,7 @@ before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost:7357 &
 
 install:
+  - cd ./frontend/website/
   - npm install -g bower
   - npm install
   - bower install
