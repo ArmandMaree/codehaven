@@ -30,7 +30,6 @@ install:
   - cd $WEBSITE_DIR
   - npm install -g bower
   - npm install
-  - bower install
 
 script:
   - cd $WEBSITE_DIR
