@@ -11,7 +11,7 @@ addons:
 
 cache:
   directories:
-    - /home/travis/build/ArmandMaree/codehaven/frontend/website/frontend/website/node_modules
+    - node_modules
     - $HOME/.npm
 
 env:
