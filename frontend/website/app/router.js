@@ -8,6 +8,7 @@ const Router = EmberRouter.extend({
 
 Router.map(function() {
   this.route('blogs');
+  this.route('blog', {path: '/blog/:blog_title'});
   this.route('about');
 });
 

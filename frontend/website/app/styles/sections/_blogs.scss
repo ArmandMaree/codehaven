@@ -1,10 +1,27 @@
 $color-grey: #CCC;
+$color-default-text: black;
 
 @mixin centerer {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.blog_row {
+	margin: 0;
+	padding: 0;
+	color: $color-default-text;
+
+	a:hover {
+		text-decoration: none;
+		color: $color-default-text;
+	}
+
+	a:link, a:visited {
+		text-decoration: none;
+		color: $color-default-text;
+	}
 }
 
 .blog_entry {
