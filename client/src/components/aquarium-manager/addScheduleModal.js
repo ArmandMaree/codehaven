@@ -2,6 +2,8 @@ import React from "react"
 import { Modal, Button, Form } from 'react-bootstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
+import cronstrue from 'cronstrue'
+import * as cronvalidator from 'cron-validator'
 
 class AddScheduleModal extends React.Component {
   constructor(props) {
@@ -12,15 +14,41 @@ class AddScheduleModal extends React.Component {
       show: false,
       saveButtonDisabled: true,
       feederId: null,
-      cron: "0 8 * * *"
+      cron: "0 8 * * *",
+      cronHuman: null,
+      cronErrorVisibility: 'hidden'
     }
 
+    this.setCronHuman = this.setCronHuman.bind(this)
     this.getFeeders = this.getFeeders.bind(this)
     this.getFeederList = this.getFeederList.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleShow = this.handleShow.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
+  }
+
+  componentDidMount() {
+    this.setCronHuman(this.state.cron)
+  }
+
+  setCronHuman(cronExpression) {
+    let cronHuman
+    let cronErrorVisibility
+
+    if (cronvalidator.isValidCron(cronExpression)) {
+      cronHuman = cronstrue.toString(cronExpression)
+      cronErrorVisibility = 'hidden'
+    }
+    else {
+      cronHuman = 'Invalid cron expression'
+      cronErrorVisibility = 'visible'
+    }
+
+    this.setState({
+      cronHuman: cronHuman,
+      cronErrorVisibility: cronErrorVisibility
+    })
   }
 
   getFeeders() {
@@ -94,6 +122,10 @@ class AddScheduleModal extends React.Component {
     this.setState({
       [event.target.name]: event.target.value
     })
+
+    if (event.target.name === 'cron') {
+      this.setCronHuman(event.target.value)
+    }
   }
 
   handleSave() {
@@ -199,6 +231,9 @@ class AddScheduleModal extends React.Component {
                   value={this.state.cron}
                   onChange={this.handleChange}>
                 </Form.Control>
+                <div style={{color: 'red', fontSize: '12px', visibility: this.state.cronErrorVisibility}}>
+                  {this.state.cronHuman}
+                </div>
               </Form.Group>
             </Form>
           </Modal.Body>

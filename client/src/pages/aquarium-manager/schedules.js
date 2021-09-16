@@ -4,6 +4,7 @@ import EditScheduleModal from '../../components/aquarium-manager/editScheduleMod
 import AddScheduleModal from '../../components/aquarium-manager/addScheduleModal'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
+import cronstrue from 'cronstrue'
 
 class FeederSchedules extends React.Component {
   constructor(props) {
@@ -91,7 +92,7 @@ class FeederSchedules extends React.Component {
         <tr key={schedule.id}>
           <td>{schedule.id}</td>
           <td>{schedule.feederName}</td>
-          <td>{schedule.cron}</td>
+          <td>{cronstrue.toString(schedule.cron)}</td>
           <td>{modal}</td>
         </tr>
       )
