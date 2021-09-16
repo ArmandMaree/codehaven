@@ -1,0 +1,17 @@
+.App {
+  text-align: center;
+  background-color: #393f4a;
+  min-height: 100vh;
+}
+
+.App-Container {
+  display: flex;
+  justify-content: center;
+}
+
+.App-Content {
+  color: white;
+  width: 1328px;
+  margin: 0 auto;
+  flex-direction: column;
+}
