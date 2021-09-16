@@ -7,16 +7,17 @@
     "clean": "rimraf dist/*",
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
     "tsc": "tsc",
-    "build": "npm-run-all clean lint tsc && cd client && npm install && npm run build",
+    "install-all": "npm install && cd client && npm install",
+    "build": "npm-run-all clean lint tsc && cd client && npm run build",
     "litebuild": "npm-run-all clean lint tsc",
     "start": "node .",
     "build:start": "npm-run-all build start",
     "litebuild:start": "npm-run-all litebuild start",
-    "dev": "nodemon --watch server/src,client/src -e ts,ejs,js --exec npm run dev:start",
+    "dev": "nodemon --watch server/src -e ts,ejs,js --exec npm run litebuild:start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Armand Maree <aamaree@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
     "rsuite": "^4.10.2"

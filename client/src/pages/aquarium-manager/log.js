@@ -46,7 +46,7 @@ class FeederLogs extends React.Component {
       method: 'GET'
     }
 
-    return fetch(`/api/aquarium-manager/logs`, requestOptions)
+    return fetch(`/api/aquarium-manager/logs?limit=20&skip=0`, requestOptions)
       .then(response => {
         if (response.status !== 200) {
           throw new Error(response.statusText)

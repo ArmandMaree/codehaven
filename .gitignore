@@ -119,3 +119,10 @@ dist
 
 # Mac
 .DS_Store
+
+# Build Directories
+/server/dist
+/client/build
+
+# VS Code
+launch.json
