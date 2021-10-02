@@ -1,88 +1,90 @@
-import React from "react"
-import { Modal, Button, Form } from 'react-bootstrap'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.min.css'
-import cronstrue from 'cronstrue'
-import * as cronvalidator from 'cron-validator'
+import React from "react";
+import { Modal, Button, Form } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import cronstrue from "cronstrue";
+import * as cronvalidator from "cron-validator";
 
 class EditScheduleModal extends React.Component {
   constructor(props) {
-    super(props)
-    this.refreshCallback = props.refreshCallback
+    super(props);
+    this.refreshCallback = props.refreshCallback;
 
     this.state = {
       show: false,
       saveButtonDisabled: true,
-      id: props.feederId,
+      id: props.scheduleId,
       feederId: null,
       cron: null,
       cronHuman: null,
-      cronErrorVisibility: 'hidden'
-    }
+      cronErrorVisibility: "hidden",
+    };
 
-    this.setCronHuman = this.setCronHuman.bind(this)
-    this.getFeeders = this.getFeeders.bind(this)
-    this.getFeederList = this.getFeederList.bind(this)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleShow = this.handleShow.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.getSchedule = this.getSchedule.bind(this)
-    this.handleSave = this.handleSave.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
+    this.setCronHuman = this.setCronHuman.bind(this);
+    this.getFeeders = this.getFeeders.bind(this);
+    this.getFeederList = this.getFeederList.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleShow = this.handleShow.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.getSchedule = this.getSchedule.bind(this);
+    this.handleSave = this.handleSave.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
-    this.setCronHuman(this.state.cron)
+    this.setCronHuman(this.state.cron);
   }
 
   setCronHuman(cronExpression) {
     if (!cronExpression) {
-      return
+      return;
     }
 
-    let cronHuman
-    let cronErrorVisibility
+    let cronHuman;
+    let cronErrorVisibility;
 
     if (cronvalidator.isValidCron(cronExpression)) {
-      cronHuman = cronstrue.toString(cronExpression)
-      cronErrorVisibility = 'hidden'
-    }
-    else {
-      cronHuman = 'Invalid cron expression'
-      cronErrorVisibility = 'visible'
+      cronHuman = cronstrue.toString(cronExpression);
+      cronErrorVisibility = "hidden";
+    } else {
+      cronHuman = "Invalid cron expression";
+      cronErrorVisibility = "visible";
     }
 
     this.setState({
       cronHuman: cronHuman,
-      cronErrorVisibility: cronErrorVisibility
-    })
+      cronErrorVisibility: cronErrorVisibility,
+    });
   }
 
   getFeeders() {
     const requestOptions = {
-      method: 'GET'
-    }
+      method: "GET",
+    };
 
     return fetch(`/api/aquarium-manager/feeders`, requestOptions)
-      .then(response => {
+      .then((response) => {
         if (response.status !== 200) {
-          throw new Error(response.statusText)
+          throw new Error(response.statusText);
         }
 
-        return response.json()
+        return response.json();
       })
-      .catch(error => {
-        toast.error('Hmmm. Something went wrong while retrieving feeders. Please try again later.', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-          
+      .catch((error) => {
+        toast.error(
+          "Hmmm. Something went wrong while retrieving feeders. Please try again later.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+
         toast.error(`Error message: ${error.message}`, {
           position: "top-right",
           autoClose: 5000,
@@ -91,84 +93,94 @@ class EditScheduleModal extends React.Component {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
-      })
+          theme: "dark",
+        });
+      });
   }
 
   getFeederList(feeders) {
-    return feeders.map((feeder) => <option value={feeder.id.toString()}>{feeder.name}</option>)
+    return feeders.map((feeder) => (
+      <option value={feeder.id.toString()}>{feeder.name}</option>
+    ));
   }
 
   handleClose() {
     this.setState({
-      show: false
-    })
+      show: false,
+    });
 
-    this.refreshCallback()
+    this.refreshCallback();
   }
 
   handleShow() {
-    const thisEditScheduleModal = this
+    const thisEditScheduleModal = this;
 
-    this.getSchedule(this.id)
-      .then(schedule => {
+    this.getSchedule(this.state.id)
+      .then((schedule) => {
         const state = {
-          ...schedule
-        }
-    
-        thisEditScheduleModal.setState(state)
+          ...schedule,
+        };
 
-        return thisEditScheduleModal.getFeeders()
+        thisEditScheduleModal.setState(state);
+
+        return thisEditScheduleModal.getFeeders();
       })
       .then((feeders) => {
-        thisEditScheduleModal.feeders = feeders
-    
+        thisEditScheduleModal.feeders = feeders;
+
         const state = {
-          feederList: thisEditScheduleModal.getFeederList(thisEditScheduleModal.feeders),
+          feederList: thisEditScheduleModal.getFeederList(
+            thisEditScheduleModal.feeders
+          ),
           show: true,
-          saveButtonDisabled: false
-        }
-    
-        thisEditScheduleModal.setState(state)
-      })
+          saveButtonDisabled: false,
+        };
+
+        thisEditScheduleModal.setState(state);
+      });
   }
 
   handleChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
-    })
+      [event.target.name]: event.target.value,
+    });
 
-    if (event.target.name === 'cron') {
-      this.setCronHuman(event.target.value)
+    if (event.target.name === "cron") {
+      this.setCronHuman(event.target.value);
     }
   }
 
   getSchedule(scheduleId) {
     const requestOptions = {
-      method: 'GET'
-    }
+      method: "GET",
+    };
 
-    return fetch(`/api/aquarium-manager/schedules/${scheduleId}`, requestOptions)
-      .then(response => {
+    return fetch(
+      `/api/aquarium-manager/schedules/${scheduleId}`,
+      requestOptions
+    )
+      .then((response) => {
         if (response.status !== 200) {
-          throw new Error(response.statusText)
+          throw new Error(response.statusText);
         }
 
-        return response.json()
+        return response.json();
       })
-      .catch(error => {
-        toast.error('Hmmm. Something went wrong while retrieving schedule. Please try again later.', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-          
+      .catch((error) => {
+        toast.error(
+          "Hmmm. Something went wrong while retrieving schedule. Please try again later.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+
         toast.error(`Error message: ${error.message}`, {
           position: "top-right",
           autoClose: 5000,
@@ -177,33 +189,33 @@ class EditScheduleModal extends React.Component {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
-      })
+          theme: "dark",
+        });
+      });
   }
 
   handleSave() {
     const requestOptions = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id: this.state.id,
         name: this.state.name,
-        defaultDuration: this.state.defaultDuration
-      })
-    }
+        defaultDuration: this.state.defaultDuration,
+      }),
+    };
 
     this.setState({
-      saveButtonDisabled: true
-    })
+      saveButtonDisabled: true,
+    });
 
     fetch(`/api/aquarium-manager/schedules/${this.state.id}`, requestOptions)
-      .then(response => {
+      .then((response) => {
         if (response.status !== 200) {
-          throw new Error(response.statusText)
+          throw new Error(response.statusText);
         }
-        
-        toast.success('Saved successfully!', {
+
+        toast.success("Saved successfully!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -211,27 +223,30 @@ class EditScheduleModal extends React.Component {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
 
         this.setState({
-          saveButtonDisabled: false
-        })
+          saveButtonDisabled: false,
+        });
 
-        this.handleClose()
+        this.handleClose();
       })
-      .catch(error => {
-        toast.error('Hmmm. Something went wrong while trying to save. Please try again later.', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-          
+      .catch((error) => {
+        toast.error(
+          "Hmmm. Something went wrong while trying to save. Please try again later.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+
         toast.error(`Error message: ${error.message}`, {
           position: "top-right",
           autoClose: 5000,
@@ -240,32 +255,32 @@ class EditScheduleModal extends React.Component {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
 
         this.setState({
-          saveButtonDisabled: false
-        })
-      })
+          saveButtonDisabled: false,
+        });
+      });
   }
 
   handleDelete() {
     const requestOptions = {
-      method: 'DELETE',
-      headers: {}
-    }
+      method: "DELETE",
+      headers: {},
+    };
 
     this.setState({
-      saveButtonDisabled: true
-    })
+      saveButtonDisabled: true,
+    });
 
     fetch(`/api/aquarium-manager/schedules/${this.state.id}`, requestOptions)
-      .then(response => {
+      .then((response) => {
         if (response.status !== 200) {
-          throw new Error(response.statusText)
+          throw new Error(response.statusText);
         }
 
-        toast.success('Deleted successfully!', {
+        toast.success("Deleted successfully!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -273,27 +288,30 @@ class EditScheduleModal extends React.Component {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
 
         this.setState({
-          saveButtonDisabled: false
-        })
+          saveButtonDisabled: false,
+        });
 
-        this.handleClose()
+        this.handleClose();
       })
-      .catch(error => {
-        toast.error('Hmmm. Something went wrong while trying to delete. Please try again later.', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-          
+      .catch((error) => {
+        toast.error(
+          "Hmmm. Something went wrong while trying to delete. Please try again later.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+
         toast.error(`Error message: ${error.message}`, {
           position: "top-right",
           autoClose: 5000,
@@ -302,13 +320,13 @@ class EditScheduleModal extends React.Component {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
+          theme: "dark",
+        });
 
         this.setState({
-          saveButtonDisabled: false
-        })
-      })
+          saveButtonDisabled: false,
+        });
+      });
   }
 
   render() {
@@ -316,19 +334,20 @@ class EditScheduleModal extends React.Component {
       <>
         <ToastContainer />
 
-        <Button
-          variant="link"
-          onClick={this.handleShow}
-          style={{padding: 0}}>
+        <Button variant="link" onClick={this.handleShow} style={{ padding: 0 }}>
           Edit
         </Button>
 
-        <Modal animation={false} show={this.state.show} onHide={this.handleClose}>
+        <Modal
+          animation={false}
+          show={this.state.show}
+          onHide={this.handleClose}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Edit Schedule</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <Form onSubmit={this.submitHandler} ref={this.formRef}>
+            <Form onSubmit={this.submitHandler} ref={this.formRef}>
               <Form.Group controlId="id">
                 <Form.Label>ID</Form.Label>
                 <Form.Control
@@ -338,8 +357,8 @@ class EditScheduleModal extends React.Component {
                   plaintext
                   readOnly
                   value={this.state.id}
-                  onChange={this.handleChange}>
-                </Form.Control>
+                  onChange={this.handleChange}
+                ></Form.Control>
               </Form.Group>
               <Form.Group controlId="feederId">
                 <Form.Label>Feeder</Form.Label>
@@ -348,8 +367,11 @@ class EditScheduleModal extends React.Component {
                   name="feederId"
                   type="text"
                   value={this.state.feederId}
-                  onChange={this.handleChange}>
-                  <option disabled selected>Select a Feeder</option>
+                  onChange={this.handleChange}
+                >
+                  <option disabled selected>
+                    Select a Feeder
+                  </option>
                   {this.state.feederList}
                 </Form.Control>
               </Form.Group>
@@ -360,9 +382,15 @@ class EditScheduleModal extends React.Component {
                   name="cron"
                   type="text"
                   value={this.state.cron}
-                  onChange={this.handleChange}>
-                </Form.Control>
-                <div style={{color: 'red', fontSize: '12px', visibility: this.state.cronErrorVisibility}}>
+                  onChange={this.handleChange}
+                ></Form.Control>
+                <div
+                  style={{
+                    color: "red",
+                    fontSize: "12px",
+                    visibility: this.state.cronErrorVisibility,
+                  }}
+                >
                   {this.state.cronHuman}
                 </div>
               </Form.Group>
@@ -373,22 +401,24 @@ class EditScheduleModal extends React.Component {
               Close
             </Button>
             <Button
-              variant="danger" 
+              variant="danger"
               onClick={this.handleDelete}
-              disabled={this.state.saveButtonDisabled}>
+              disabled={this.state.saveButtonDisabled}
+            >
               Delete
             </Button>
             <Button
-              variant="primary" 
+              variant="primary"
               onClick={this.handleSave}
-              disabled={this.state.saveButtonDisabled}>
+              disabled={this.state.saveButtonDisabled}
+            >
               Save Changes
             </Button>
           </Modal.Footer>
         </Modal>
       </>
-    )
+    );
   }
 }
 
-export default EditScheduleModal
+export default EditScheduleModal;

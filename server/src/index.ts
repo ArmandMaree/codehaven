@@ -1,32 +1,34 @@
 import path from 'path';
-import express from 'express';
+import express, { Router } from 'express';
 import dotenv from 'dotenv';
-import * as routes from "./routes";
+import logger from './logger';
+import routes from './routes';
+import AquariumManager from './aquarium-manager';
 
 // initialize configuration
-const result = dotenv.config()
+const result = dotenv.config();
 
 if (result.error) {
-  throw result.error
+  throw result.error;
 }
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
-const clientPath = '../../client'
+const clientPath = '../../client';
 
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, clientPath, 'build')));
 
-// Configure routes
-routes.register(app);
+routes.register(app).then((router: Router) => {
+  AquariumManager.register(app, router);
+}).then(() => {
+  // All other GET requests not handled before will return our React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, clientPath, 'build', 'index.html'));
+  });
 
-// All other GET requests not handled before will return our React app
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, clientPath, 'build', 'index.html'));
-});
-
-app.listen(PORT, () => {
-  // tslint:disable-next-line:no-console
-  console.log(`Server listening on ${PORT}`);
+  app.listen(PORT, () => {
+    logger.info(`Server listening on ${PORT}`);
+  });
 });

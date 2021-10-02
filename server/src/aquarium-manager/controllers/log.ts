@@ -1,15 +1,16 @@
-import { getFeedLogs } from "../helpers/log"
+import { getLogs } from '../persistence/log';
+import Log from '../persistence/models/log';
 
-const handleGetFeedLogs = (req:any, res:any) => {
-  return getFeedLogs(req.query.limit, req.query.skip)
-    .then(logs => {
-      res.status(200).send(logs)
-    })
-    .catch(error => {
-      res.status(500).send(error)
-    })
-}
+const handleGetFeedLogs = (req: any, res: any) => getLogs(Number(req.query.limit), Number(req.query.skip), true)
+  .then((logs: Log[]) => {
+    res.status(200).send(logs);
+  })
+  .catch((error) => {
+    req.log.error(error);
+    res.status(500).send(error);
+  });
 
 export {
-  handleGetFeedLogs
-}
+  // eslint-disable-next-line import/prefer-default-export
+  handleGetFeedLogs,
+};

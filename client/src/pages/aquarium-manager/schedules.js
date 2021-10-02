@@ -1,30 +1,27 @@
-import React from "react"
-import { Table } from 'react-bootstrap'
-import EditScheduleModal from '../../components/aquarium-manager/editScheduleModal'
-import AddScheduleModal from '../../components/aquarium-manager/addScheduleModal'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.min.css'
-import cronstrue from 'cronstrue'
+import React from "react";
+import { Table } from "react-bootstrap";
+import EditScheduleModal from "../../components/aquarium-manager/editScheduleModal";
+import AddScheduleModal from "../../components/aquarium-manager/addScheduleModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import cronstrue from "cronstrue";
 
 class FeederSchedules extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      scheduleList: []
-    }
+      scheduleList: [],
+    };
 
-    this.getScheduleList = this.getScheduleList.bind(this)
-    this.tick = this.tick.bind(this)
-    this.getSchedules = this.getSchedules.bind(this)
+    this.getScheduleList = this.getScheduleList.bind(this);
+    this.tick = this.tick.bind(this);
+    this.getSchedules = this.getSchedules.bind(this);
   }
 
   componentDidMount() {
-    document.title = "Schedules - Feeders - CodeHaven"
-    this.tick()
-    this.timerID = setInterval(
-      () => this.tick(),
-      30000
-    );
+    document.title = "Schedules - Feeders - CodeHaven";
+    this.tick();
+    this.timerID = setInterval(() => this.tick(), 30000);
   }
 
   componentWillUnmount() {
@@ -32,43 +29,47 @@ class FeederSchedules extends React.Component {
   }
 
   tick() {
-    const thisFeederSchedules = this
+    const thisFeederSchedules = this;
 
-    this.getSchedules()
-      .then(schedules => {
-        thisFeederSchedules.schedules = schedules
-    
-        thisFeederSchedules.setState({
-          scheduleList: thisFeederSchedules.getScheduleList(thisFeederSchedules.schedules)
-        })
-      })
+    this.getSchedules().then((schedules) => {
+      thisFeederSchedules.schedules = schedules;
+
+      thisFeederSchedules.setState({
+        scheduleList: thisFeederSchedules.getScheduleList(
+          thisFeederSchedules.schedules
+        ),
+      });
+    });
   }
 
   getSchedules() {
     const requestOptions = {
-      method: 'GET'
-    }
+      method: "GET",
+    };
 
     return fetch(`/api/aquarium-manager/schedules`, requestOptions)
-      .then(response => {
+      .then((response) => {
         if (response.status !== 200) {
-          throw new Error(response.statusText)
+          throw new Error(response.statusText);
         }
 
-        return response.json()
+        return response.json();
       })
-      .catch(error => {
-        toast.error('Hmmm. Something went wrong while retrieving schedules. Please try again later.', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-          
+      .catch((error) => {
+        toast.error(
+          "Hmmm. Something went wrong while retrieving schedules. Please try again later.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+
         toast.error(`Error message: ${error.message}`, {
           position: "top-right",
           autoClose: 5000,
@@ -77,26 +78,29 @@ class FeederSchedules extends React.Component {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        })
-      })
+          theme: "dark",
+        });
+      });
   }
 
   getScheduleList(schedules) {
     return schedules.map((schedule) => {
       const modal = (
-        <EditScheduleModal scheduleId={schedule.id} refreshCallback={this.tick} />
-      )
+        <EditScheduleModal
+          scheduleId={schedule.id}
+          refreshCallback={this.tick}
+        />
+      );
 
       return (
         <tr key={schedule.id}>
           <td>{schedule.id}</td>
-          <td>{schedule.feederName}</td>
+          <td>{schedule.Feeder.name}</td>
           <td>{cronstrue.toString(schedule.cron)}</td>
           <td>{modal}</td>
         </tr>
-      )
-    })
+      );
+    });
   }
 
   render() {
@@ -118,13 +122,11 @@ class FeederSchedules extends React.Component {
               <th></th>
             </tr>
           </thead>
-          <tbody>
-            {this.state.scheduleList}
-          </tbody>
+          <tbody>{this.state.scheduleList}</tbody>
         </Table>
       </>
     );
   }
 }
 
-export default FeederSchedules
+export default FeederSchedules;
