@@ -15,7 +15,8 @@
     "litebuild:start": "npm-run-all litebuild start",
     "dev": "nodemon --watch server/src -e ts,ejs,js --exec npm run litebuild:start",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "sequelize-cli db:migrate"
+    "migrate": "sequelize-cli db:migrate",
+    "migrate:undo": "sequelize-cli db:migrate:undo"
   },
   "author": "Armand Maree <aamaree@gmail.com>",
   "license": "MIT",
