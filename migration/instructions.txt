@@ -1,0 +1,11 @@
+Make sure the global package is installed:
+npm install sequelize-mig -g
+
+Create models using:
+npx sequelize-cli model:generate --name Feeders --attributes id:number,name:string,defaultDuration:number,createdAt:date,updatedAt:date,deletedAt:date
+
+To create a migration run this:
+sequelize-mig migration:make -n <migration name>
+
+Then to run migration run this:
+npx sequelize-cli db:migrate
