@@ -3,6 +3,8 @@ import {
 } from '../persistence/feeder';
 import Feeder from '../persistence/models/feeder';
 import { createLog } from '../persistence/log';
+import { sendFeedCommand } from '../communicator/feed';
+import logger from '../../logger';
 
 type FeederZeroToMany = null | Feeder | Feeder[];
 
@@ -51,7 +53,7 @@ const handleDeleteFeeder = (req: any, res: any) => {
 };
 
 const handleFeed = (req: any, res: any) => {
-  return Promise.reject(new Error('Not implemented'))
+  return sendFeedCommand(req.body.feederId, req.body.duration)
     .catch(async (error) => {
       let message: string;
 
@@ -61,10 +63,13 @@ const handleFeed = (req: any, res: any) => {
         message = error.toString();
       }
 
+      logger.error(`Failed to execute manual feed command on feeder with ID ${req.body.feederId}. Message: ${message}`);
+      logger.error(error);
       await createLog(req.body.feederId, req.body.duration, 'Manual', 'Failure', message);
       throw error;
     })
     .then(() => {
+      logger.info(`Successfully executed feed command on feeder with ID ${req.body.feederId}.`);
       return createLog(req.body.feederId, req.body.duration, 'Manual', 'Success');
     })
     .then(() => {

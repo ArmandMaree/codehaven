@@ -1,11 +1,27 @@
-Make sure the global package is installed:
-npm install sequelize-mig -g
++-----------------------------------------------------------------+
+|                          INITIAL SETUP                          |
++-----------------------------------------------------------------+
+1) Make sure sequelize-mig is installedd globally by running:
+  npm install sequelize-mig -g
 
-Create models using:
-npx sequelize-cli model:generate --name Feeders --attributes id:number,name:string,defaultDuration:number,createdAt:date,updatedAt:date,deletedAt:date
++-----------------------------------------------------------------+
+|                   CREATE A NEW DATABASE TABLE                   |
++-----------------------------------------------------------------+
+1) Create a new model by running
+  npx sequelize-cli model:generate --name <TableName> --attributes id:number,name:string,deletedAt:date
 
-To create a migration run this:
-sequelize-mig migration:make -n <migration name>
++-----------------------------------------------------------------+
+|                UPDATE AN EXISTING DATABASE TABLE                |
++-----------------------------------------------------------------+
+1) Modify the model (this is located in src/migrations/models)
 
-Then to run migration run this:
-npx sequelize-cli db:migrate
++-----------------------------------------------------------------+
+|             MIGRATE DATABASE TO CONTAIN NEW CHANGES             |
++-----------------------------------------------------------------+
+1) Then generate the migration file by running
+  sequelize-mig migration:make -n <migration name>
+2) Then you can upgrade the DB by running
+  npx sequelize-cli db:migrate
+  2.1) You can rollback the upgrade by running:
+    npx sequelize-cli db:migrate:undo
+  2.2) The environment that gets upgraded is specified by the NODE_ENV variable in the .env file

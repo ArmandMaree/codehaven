@@ -15,6 +15,7 @@ class AddScheduleModal extends React.Component {
       saveButtonDisabled: true,
       feederId: null,
       cron: "0 8 * * *",
+      duration: 1000,
       cronHuman: null,
       cronErrorVisibility: 'hidden'
     }
@@ -134,7 +135,8 @@ class AddScheduleModal extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         feederId: this.state.feederId,
-        cron: this.state.cron
+        cron: this.state.cron,
+        duration: this.state.duration
       })
     }
 
@@ -234,6 +236,16 @@ class AddScheduleModal extends React.Component {
                 <div style={{color: 'red', fontSize: '12px', visibility: this.state.cronErrorVisibility}}>
                   {this.state.cronHuman}
                 </div>
+              </Form.Group>
+              <Form.Group controlId="duration">
+                <Form.Label>Duration (ms)</Form.Label>
+                <Form.Control
+                  as="input"
+                  name="duration"
+                  type="number"
+                  value={this.state.duration}
+                  onChange={this.handleChange}>
+                </Form.Control>
               </Form.Group>
             </Form>
           </Modal.Body>

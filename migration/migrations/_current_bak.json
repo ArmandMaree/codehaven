@@ -107,10 +107,6 @@
                     "field": "cron",
                     "seqType": "Sequelize.STRING"
                 },
-                "duration": {
-                    "field": "duration",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "deletedAt": {
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
@@ -142,6 +138,6 @@
     },
     "path": "/Users/mareea/Documents/GitHub/codehaven/migration/migrations/_current.json",
     "backupPath": "/Users/mareea/Documents/GitHub/codehaven/migration/migrations/_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }

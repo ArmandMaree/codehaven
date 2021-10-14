@@ -1,9 +1,11 @@
 import path from 'path';
 import express, { Router } from 'express';
 import dotenv from 'dotenv';
+import http from 'http';
 import logger from './logger';
 import routes from './routes';
 import AquariumManager from './aquarium-manager';
+import SocketHandler from './socket-handler';
 
 // initialize configuration
 const result = dotenv.config();
@@ -15,6 +17,9 @@ if (result.error) {
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+const server = http.createServer(app);
+SocketHandler.register(server);
+
 const clientPath = '../../client';
 
 // Have Node serve the files for our built React app

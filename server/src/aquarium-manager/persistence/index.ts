@@ -20,11 +20,11 @@ const register = (): Promise<void> => {
         logging: (msg) => logger.debug(msg),
       });
 
-    return Models.register(sequelize)
-      .then(() => sequelize.sync()) // { force: true, match: /_test$/ }
-      .then(() => {
-        logger.info('All models were synchronized successfully.');
-      });
+    return Models.register(sequelize);
+    // .then(() => sequelize.sync()) // { force: true, match: /_test$/ }
+    // .then(() => {
+    //   logger.info('All models were synchronized successfully.');
+    // });
   }
 
   return Promise.resolve();

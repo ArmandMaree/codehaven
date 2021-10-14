@@ -97,6 +97,7 @@ class FeederSchedules extends React.Component {
           <td>{schedule.id}</td>
           <td>{schedule.Feeder.name}</td>
           <td>{cronstrue.toString(schedule.cron)}</td>
+          <td>{schedule.duration}</td>
           <td>{modal}</td>
         </tr>
       );
@@ -119,6 +120,7 @@ class FeederSchedules extends React.Component {
               <th>ID</th>
               <th>Feeder</th>
               <th>Schedule (Cron)</th>
+              <th>Duration (ms)</th>
               <th></th>
             </tr>
           </thead>

@@ -1,19 +1,22 @@
 import {
-  Sequelize, Model, INTEGER, STRING, Optional,
+  Sequelize, Model, INTEGER, STRING, Optional, NUMBER,
 } from 'sequelize';
 
 interface ScheduleAttributes {
   id: number;
   cron: string;
+  duration: number;
 }
 
-interface ScheduleCreationAttributes extends Optional<ScheduleAttributes, 'id'> {}
+interface ScheduleCreationAttributes extends Optional<ScheduleAttributes, 'id'> { }
 
 export default class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> implements ScheduleAttributes {
   static sequelize: Sequelize;
 
   public id!: number;
   public cron!: string;
+  public duration!: number;
+  public FeederId!: number;
 
   // timestamps!
   public readonly createdAt!: Date;
@@ -33,6 +36,10 @@ export default class Schedule extends Model<ScheduleAttributes, ScheduleCreation
         },
         cron: {
           type: STRING,
+          allowNull: false,
+        },
+        duration: {
+          type: NUMBER,
           allowNull: false,
         },
       }, {

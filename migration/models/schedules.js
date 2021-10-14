@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Schedules.init({
     cron: DataTypes.STRING,
+    duration: DataTypes.INTEGER,
     deletedAt: DataTypes.DATE,
   }, {
     sequelize,

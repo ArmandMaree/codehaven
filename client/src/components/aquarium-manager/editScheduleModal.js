@@ -16,6 +16,7 @@ class EditScheduleModal extends React.Component {
       id: props.scheduleId,
       feederId: null,
       cron: null,
+      duration: null,
       cronHuman: null,
       cronErrorVisibility: "hidden",
     };
@@ -200,8 +201,9 @@ class EditScheduleModal extends React.Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id: this.state.id,
-        name: this.state.name,
-        defaultDuration: this.state.defaultDuration,
+        feederId: this.state.feederId,
+        cron: this.state.cron,
+        duration: this.state.duration,
       }),
     };
 
@@ -393,6 +395,16 @@ class EditScheduleModal extends React.Component {
                 >
                   {this.state.cronHuman}
                 </div>
+              </Form.Group>
+              <Form.Group controlId="duration">
+                <Form.Label>Duration (ms)</Form.Label>
+                <Form.Control
+                  as="input"
+                  name="duration"
+                  type="number"
+                  value={this.state.duration}
+                  onChange={this.handleChange}
+                ></Form.Control>
               </Form.Group>
             </Form>
           </Modal.Body>
