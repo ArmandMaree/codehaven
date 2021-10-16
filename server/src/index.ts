@@ -1,18 +1,19 @@
+// initialize configuration
+/* eslint-disable import/first */
+// eslint-disable-next-line import/order
+const result = require('dotenv').config();
+
+if (result.error) {
+  throw result.error;
+}
+
 import path from 'path';
 import express, { Router } from 'express';
-import dotenv from 'dotenv';
 import http from 'http';
 import logger from './logger';
 import routes from './routes';
 import AquariumManager from './aquarium-manager';
 import SocketHandler from './socket-handler';
-
-// initialize configuration
-const result = dotenv.config();
-
-if (result.error) {
-  throw result.error;
-}
 
 const PORT = process.env.PORT || 3001;
 
