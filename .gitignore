@@ -126,3 +126,6 @@ dist
 
 # VS Code
 launch.json
+
+# SSL Certs
+sslcert

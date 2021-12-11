@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Server as HttpServer } from 'http';
+import { Server as HttpsServer } from 'https';
 import WebSocket from 'ws';
 import queryString from 'query-string';
 import logger from '../logger';
@@ -7,7 +8,7 @@ import AquariumSocketHandler from '../aquarium-manager/socket-handler';
 
 let websocketServer:WebSocket.Server;
 
-const register = async (httpServer: HttpServer) => {
+const register = async (httpServer: HttpServer, httpsServer: HttpsServer | undefined) => {
   logger.info('Registering socket handler.');
 
   websocketServer = new WebSocket.Server({
@@ -23,6 +24,17 @@ const register = async (httpServer: HttpServer) => {
       websocketServer.emit('connection', websocket, request);
     });
   });
+
+  if (httpsServer) {
+    httpsServer.on('upgrade', (request, socket, head) => {
+      logger.info('Upgrading request to websocket.');
+
+      websocketServer.handleUpgrade(request, socket, head, (websocket) => {
+        logger.info('Handling websocket upgrade.');
+        websocketServer.emit('connection', websocket, request);
+      });
+    });
+  }
 
   websocketServer.on(
     'connection',
