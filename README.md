@@ -1,4 +1,4 @@
-# Code Haven
+# CodeHaven
 
 Travis-CI build status:
 - Master: <img src="https://travis-ci.org/ArmandMaree/codehaven.svg?branch=master" />

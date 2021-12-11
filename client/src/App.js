@@ -9,7 +9,7 @@ import {
   } from "react-router-dom";
 import Pages from './pages'
 
-class App extends React.Component {
+class App extends React.Component {  
   render() {
     return (
       <div className="App">

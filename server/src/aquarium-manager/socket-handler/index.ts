@@ -1,24 +1,26 @@
-import SocketIo from 'socket.io';
+import WebSocket from 'ws';
 
-const connectedClients = new Map<number, SocketIo.Socket>();
+const connectedClients = new Map<number, WebSocket.WebSocket>();
 
-const register = async (socket: SocketIo.Socket, data: any) => {
+const register = async (socket: WebSocket.WebSocket, data: any) => {
   connectedClients.set(data.feederId, socket);
-
-  // socket.on('aquarium-manager-register', (data: any) => {
-
-  // });
+  socket.send(JSON.stringify({
+    event: 'message',
+    data: {
+      message: 'Registered successfully',
+    },
+  }));
 };
 
 const sendMesageToClient = async (feederId: number, data: any) => {
   if (connectedClients.has(feederId)) {
-    const socket: SocketIo.Socket = connectedClients.get(feederId)!;
+    const socket: WebSocket.WebSocket = connectedClients.get(feederId)!;
 
     if (!socket) {
       throw new Error(`Socket not connected for feeder with ID: ${feederId}`);
     }
 
-    if (socket.connected) {
+    if (socket.readyState === WebSocket.OPEN) {
       socket.emit(data);
     } else {
       throw new Error(`Socket not connected for feeder with ID: ${feederId}`);

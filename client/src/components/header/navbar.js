@@ -3,6 +3,7 @@ import "rsuite/dist/styles/rsuite-default.css";
 import React from "react";
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
+import Login from '../login'
 
 class BootstrapNavbar extends React.Component {
   render() {
@@ -19,6 +20,9 @@ class BootstrapNavbar extends React.Component {
               <NavDropdown.Item as={Link} to="/aquarium-manager/devices">Devices</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/aquarium-manager/schedules">Schedules</NavDropdown.Item>
             </NavDropdown>
+          </Nav>
+          <Nav>
+            <Login />
           </Nav>
         </Container>
       </Navbar>
