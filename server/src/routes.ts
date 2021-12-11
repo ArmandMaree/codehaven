@@ -3,6 +3,12 @@ import { expressLogger } from './logger';
 
 const router = Router();
 
+const healthHandler = (req: express.Request, res:express.Response) => {
+  res.status(200).send({
+    status: 'running',
+  });
+};
+
 const register = (app: express.Application): Promise<Router> => {
   app.use(expressLogger);
 
@@ -16,11 +22,8 @@ const register = (app: express.Application): Promise<Router> => {
   router.use(express.json());
 
   // Handle GET requests to /health route
-  router.get('/health', (req, res) => {
-    res.status(200).send({
-      status: 'running',
-    });
-  });
+  app.use('/health', healthHandler);
+  router.use('/health', healthHandler);
 
   return Promise.resolve(router);
 };
