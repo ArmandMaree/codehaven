@@ -1,0 +1,5 @@
+1. Download SSL certificate from domain.com
+2. Using FileZilla, place the .crt and .key files in /opt/bitnami/apache/conf/bitnami/certs
+3. Then rename the files to server.crt and server.key
+4. Then restart Apache using this command. This might take a couple of minutes.
+   sudo /opt/bitnami/ctlscript.sh restart apache

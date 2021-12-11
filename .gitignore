@@ -128,4 +128,5 @@ dist
 launch.json
 
 # SSL Certs
-sslcert
+sslcert/*.crt
+sslcert/*.key
