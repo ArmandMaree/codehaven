@@ -21,7 +21,7 @@ const sendMesageToClient = async (feederId: number, data: any) => {
     }
 
     if (socket.readyState === WebSocket.OPEN) {
-      socket.emit(data);
+      socket.send(JSON.stringify(data));
     } else {
       throw new Error(`Socket not connected for feeder with ID: ${feederId}`);
     }

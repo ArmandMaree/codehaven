@@ -36,19 +36,23 @@ const register = async (httpServer: HttpServer) => {
       logger.info(connectionParams);
 
       websocketConnection.on('message', (message) => {
-        const parsedMessage = JSON.parse(message.toString());
-        switch (parsedMessage.event) {
-          case 'aquarium-manager-register':
-            AquariumSocketHandler.register(websocketConnection, parsedMessage.data);
-            break;
-          default:
-            websocketConnection.send(JSON.stringify({
-              event: 'error',
-              data: {
-                message: 'event property missing from message',
-              },
-            }));
-            break;
+        try {
+          const parsedMessage = JSON.parse(message.toString());
+          switch (parsedMessage.event) {
+            case 'aquarium-manager-register':
+              AquariumSocketHandler.register(websocketConnection, parsedMessage.data);
+              break;
+            default:
+              websocketConnection.send(JSON.stringify({
+                event: 'error',
+                data: {
+                  message: 'event property missing from message',
+                },
+              }));
+              break;
+          }
+        } catch (error:any) {
+          logger.error(error);
         }
       });
     },
