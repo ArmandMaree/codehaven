@@ -10,7 +10,7 @@ if (result.error) {
 import path from 'path';
 import express, { Router } from 'express';
 // import Auth from './auth';
-import http from 'http';
+// import http from 'http';
 import SocketHandler from './socket-handler';
 import AquariumManager from './aquarium-manager';
 import routes from './routes';
@@ -19,7 +19,7 @@ import logger from './logger';
 const HTTP_PORT = process.env.HTTP_PORT || 3000;
 
 const app = express();
-const httpServer = http.createServer(app);
+// const httpServer = http.createServer(app);
 
 const clientRelativePath = '../../client';
 const clientBuildAbsolutePath = path.resolve(__dirname, clientRelativePath, 'build');
@@ -39,12 +39,15 @@ routes.register(app)
   })
   .then(() => {
     // All other GET requests not handled before will return our React app
-    app.get('*', (req, res) => {
+    // const uiRouter = Router();
+
+    // app.use('/view', uiRouter);
+    app.get('*', (req: any, res: any) => {
       logger.info(`GET request was received on ${req.url}. Catch-all is returning homepage.`);
       res.sendFile(path.resolve(clientBuildAbsolutePath, 'index.html'));
     });
 
-    app.listen(HTTP_PORT, () => {
+    const httpServer = app.listen(HTTP_PORT, () => {
       logger.info(`HTTP server listening on ${HTTP_PORT}`);
     });
 
