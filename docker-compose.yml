@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./codehaven-frontend
+      dockerfile: ./Dockerfile
+      target: development
+    image: codehaven-frontend
+    ports:
+      - "3000:3000"
+  backend:
+    build:
+      context: ./codehaven-backend
+      dockerfile: ./Dockerfile
+      target: development
+    image: codehaven-backend
+    ports:
+      - "3001:3001"
+  nginx:
+    depends_on:
+      - backend
+      - frontend
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: codehaven-nginx
+    ports:
+      - "80:80"

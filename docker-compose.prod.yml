@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  frontend:
+    build:
+      target: production
+    restart: always
+    command: npm start
+  backend:
+    build:
+      target: production
+    restart: always
+    command: npm start
+  nginx:
+    restart: always

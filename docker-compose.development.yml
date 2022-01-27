@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  frontend:
+    build:
+      target: development
+    volumes:
+      - ./codehaven-frontend/src:/app/src
+    command: npm run dev
+  backend:
+    build:
+      target: development
+    volumes:
+      - ./codehaven-backend/src:/app/src
+    command: npm run dev
