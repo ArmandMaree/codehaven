@@ -1,0 +1,6 @@
+[submodule "codehaven-frontend"]
+	path = codehaven-frontend
+	url = https://github.com/ArmandMaree/codehaven-frontend.git
+[submodule "codehaven-backend"]
+	path = codehaven-backend
+	url = https://github.com/ArmandMaree/codehaven-backend.git
