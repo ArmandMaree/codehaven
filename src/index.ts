@@ -16,7 +16,7 @@ import AquariumManager from './aquarium-manager';
 import routes from './routes';
 import logger from './logger';
 
-const HTTP_PORT = process.env.HTTP_PORT || 3000;
+const HTTP_PORT = process.env.HTTP_PORT || 3080;
 
 const app = express();
 // const httpServer = http.createServer(app);
@@ -26,27 +26,13 @@ const clientBuildAbsolutePath = path.resolve(__dirname, clientRelativePath, 'bui
 
 // Have Node serve the files for our built React app
 app.use(express.static(clientBuildAbsolutePath));
-let apiRouter: Router | undefined;
 
 routes.register(app)
   .then((router: Router) => {
-    apiRouter = router;
-    //   return Auth.register(app);
-    // })
-    // .then(() => {
-    return AquariumManager.register(app, apiRouter!)
+    return AquariumManager.register(app, router!)
       .catch(() => { });
   })
   .then(() => {
-    // All other GET requests not handled before will return our React app
-    // const uiRouter = Router();
-
-    // app.use('/view', uiRouter);
-    app.get('*', (req: any, res: any) => {
-      logger.info(`GET request was received on ${req.url}. Catch-all is returning homepage.`);
-      res.sendFile(path.resolve(clientBuildAbsolutePath, 'index.html'));
-    });
-
     const httpServer = app.listen(HTTP_PORT, () => {
       logger.info(`HTTP server listening on ${HTTP_PORT}`);
     });

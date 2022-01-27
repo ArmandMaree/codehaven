@@ -1,7 +1,9 @@
 const getAllStatuses = () => Promise.resolve([
   {
-    id: 1,
-    name: '10 Gallon Aquarium',
+    Feeder: {
+      id: 1,
+      name: '10 Gallon Aquarium',
+    },
     status: 'Operational',
     code: 200,
     message: 'I am online!',

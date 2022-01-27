@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Server as HttpServer } from 'http';
 import WebSocket from 'ws';
 import queryString from 'query-string';

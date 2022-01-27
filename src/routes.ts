@@ -12,7 +12,7 @@ const healthHandler = (req: express.Request, res:express.Response) => {
 const register = (app: express.Application): Promise<Router> => {
   app.use(expressLogger);
 
-  // Define subrouter for /api routes
+  // Define router for API
   app.use('/api', router);
 
   // Parse URL-encoded bodies (as sent by HTML forms)
