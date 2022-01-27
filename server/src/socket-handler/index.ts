@@ -38,18 +38,28 @@ const register = async (httpServer: HttpServer) => {
       websocketConnection.on('message', (message) => {
         try {
           const parsedMessage = JSON.parse(message.toString());
-          switch (parsedMessage.event) {
-            case 'aquarium-manager-register':
-              AquariumSocketHandler.register(websocketConnection, parsedMessage.data);
-              break;
-            default:
-              websocketConnection.send(JSON.stringify({
-                event: 'error',
-                data: {
-                  message: 'event property missing from message',
-                },
-              }));
-              break;
+
+          if (!parsedMessage.event) {
+            websocketConnection.send(JSON.stringify({
+              event: 'error',
+              data: {
+                message: 'event property missing from message',
+              },
+            }));
+          } else {
+            switch (parsedMessage.event) {
+              case 'aquarium-manager-register':
+                AquariumSocketHandler.register(websocketConnection, parsedMessage.data);
+                break;
+              default:
+                websocketConnection.send(JSON.stringify({
+                  event: 'error',
+                  data: {
+                    message: `Event ${parsedMessage.event} is not supported`,
+                  },
+                }));
+                break;
+            }
           }
         } catch (error:any) {
           logger.error(error);
