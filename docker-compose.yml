@@ -3,15 +3,27 @@ version: '3'
 services:
   frontend:
     build:
-      context: .
+      context: ./codehaven-frontend
       dockerfile: ./Dockerfile
-    image: armandmaree/codehaven-ui:latest
+      target: development
+    image: codehaven-frontend
     ports:
-      - "8080"
+      - "3000:3000"
   backend:
     build:
-      context: .
+      context: ./codehaven-backend
       dockerfile: ./Dockerfile
-    image: armandmaree/codehaven-ui:latest
+      target: development
+    image: codehaven-backend
     ports:
-      - "8080"
+      - "3001:3001"
+  nginx:
+    depends_on:
+      - backend
+      - frontend
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: codehaven-nginx
+    ports:
+      - "80:80"
